@@ -1,38 +1,37 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import socket from '../socket'
 import { AuthContext } from '../context/AuthContext'
 
-const ChatPage = (props) => {
+const ChatPage = () => {
     const { token } = useContext(AuthContext)
 
-    const { hist } = props
-    const [history, setHistory] = useState(hist)
+    const [history, setHistory] = useState([])
 
     const [message, setMessage] = useState('')
 
+    useEffect(() => {
+        socket.on('load history', hst => {
+            setHistory(hst)
+            console.log('load history')
+        })
+    }, [])
 
-    socket.on('load history', hst => {
-        setHistory(hst)
-        console.log('load history')
-    })
+    useEffect(() => {
+        socket.on('add message', msg => {
+            console.log('add message')
 
-    socket.on('add message', msg => {
-        console.log('add message')
-
-        if (history) {
             setHistory([
                 ...history,
                 { ...msg }
             ])
-        }
-        else {
-            setHistory([
-                { ...msg }
-            ])
-        }
-    })
+        })
 
+        return () => {
+            socket.removeAllListeners('add message')
+        }
+    }, [history])
 
+    
 
     const sendHandler = () => {
         setMessage('')
