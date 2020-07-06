@@ -1,0 +1,6 @@
+{
+    "port": 5000,
+    "jwtSecret": "mySecret",
+    "mongoUri": "mongodb://localhost:27017/sharazh-chat",
+    "baseUrl": "http://localhost:5000"
+}
