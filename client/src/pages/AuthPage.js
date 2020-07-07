@@ -14,13 +14,13 @@ const AuthPage = () => {
 
     const registerHandler = async () => {
         const res = await Axios.post('/api/auth/register', { ...authForm })
-        console.log(res.data)
+        console.log('зарегистрирован ', res.data)
     }
 
     const loginHandler = async () => {
         const res = await Axios.post('/api/auth/login', { ...authForm })
-        console.log(res.data)
-        auth.login(res.data.token, res.data.userId)
+        console.log('вошел ', res.data)
+        auth.login(res.data.token, res.data.userId, res.data.nickname)
     }
 
     return (

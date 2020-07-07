@@ -29,7 +29,6 @@ router.post(
 router.post(
     '/login',
     async (req, res) => {
-        console.log('dawdawd')
         const { login, password } = req.body
         if (login && password) {
             const user = await User.findOne({ login })

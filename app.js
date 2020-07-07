@@ -5,6 +5,7 @@ const config = require('config')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const Message = require('./models/Message')
+const User = require('./models/User')
 
 const app = express()
 const server = http.createServer(app)
@@ -27,10 +28,21 @@ const start = async () => {
             return { message, userId, dateTime }
         })
 
-        io.emit('load history', hst)
+        const users = await User.find()
+
+        const us = users.map(el => {
+            const { nickname } = el
+            return { nickname }
+        })
+
+        io.emit('load history', { hst, us })
 
         socket.on('new message', async data => {
             const { token, message } = data
+
+            if (!token) {
+                io.emit('not auth')
+            }
 
             if (token) {
                 const decoded = jwt.verify(token, config.get('jwtSecret'))
@@ -43,7 +55,6 @@ const start = async () => {
 
                 const savedMsg = await msg.save()
 
-                console.log(savedMsg)
                 io.emit('add message', savedMsg)
             }
         })
