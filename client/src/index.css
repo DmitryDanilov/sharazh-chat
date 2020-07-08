@@ -192,6 +192,7 @@ html {
     padding: 10px;
     position: relative;
     min-width: 80px;
+    max-width: 600px;
 }
 
 .msg_cotainer_send {

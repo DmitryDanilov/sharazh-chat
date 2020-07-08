@@ -5,13 +5,16 @@ import Message from '../components/Message'
 import User from '../components/User'
 
 const ChatPage = () => {
-    const { token, logout } = useContext(AuthContext)
+
+    const { token, logout/*, userId*/ } = useContext(AuthContext)
 
     const [users, setUsers] = useState([])
 
     const [history, setHistory] = useState([])
 
     const [message, setMessage] = useState('')
+
+    //const [usersOnline, setUsersOnline] = useState([])
 
     useEffect(() => {
         socket.on('load history', data => {
@@ -49,6 +52,19 @@ const ChatPage = () => {
             socket.removeAllListeners('add message')
         }
     }, [history])
+
+    /*useEffect(() => {
+        socket.on('users online', data => {
+            console.log('users online')
+            console.log(data)
+
+            setUsersOnline(data)
+        })
+
+        return () => {
+            socket.removeAllListeners('users online')
+        }
+    }, [usersOnline])*/
 
     useEffect(() => {
         const scrollingElement = document.getElementById('card-body')
@@ -90,7 +106,7 @@ const ChatPage = () => {
                         <ui className="contacts">
                             {
                                 users && users.map((el, index) => {
-                                    return (<User key={index} user={el.nickname} />)
+                                    return (<User key={index} user={el.nickname}/* userId={userId} usersOnline={usersOnline}*/ />)
                                 })
                             }
                         </ui>

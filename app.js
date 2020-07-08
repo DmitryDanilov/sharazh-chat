@@ -24,9 +24,15 @@ app.use('/api/auth', require('./routes/auth.routes'))
 
 
 const start = async () => {
+
+    //const usersOnline = new Map()
+
     io.on('connection', async socket => {
         console.log(`New client connected ${socket.id}`)
 
+        //usersOnline.set(socket.id, socket.id)
+
+        //io.emit('users online', Array.from(usersOnline.keys()))
 
         socket.on('load history and users', async () => {
             const history = await Message.find()
@@ -77,6 +83,10 @@ const start = async () => {
 
         socket.on('disconnect', () => {
             tempSocket = socket.id
+
+            //usersOnline.delete(socket.id)
+            //io.emit('users online', Array.from(usersOnline.keys()))
+            
             console.log(`user disconnected ${socket.id}`)
         })
 
