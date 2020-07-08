@@ -5,7 +5,7 @@ const User = (props) => {
         <li className="active">
             <div className="d-flex bd-highlight">
                 <div className="img_cont">
-                    <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img"></img>
+                    <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img" alt="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"></img>
                     <span className="online_icon"></span>
                 </div>
                 <div className="user_info">

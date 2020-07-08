@@ -1,6 +1,6 @@
-import React, {useContext} from 'react'
-import {NavLink, useHistory} from 'react-router-dom'
-import {AuthContext} from '../context/AuthContext'
+import React, { useContext } from 'react'
+import { NavLink, useHistory } from 'react-router-dom'
+import { AuthContext } from '../context/AuthContext'
 
 export const Navbar = () => {
   const history = useHistory()
@@ -12,10 +12,23 @@ export const Navbar = () => {
     history.push('/')
   }
 
-  return (
+  /*return (
     <nav>
       <div className="nav-wrapper blue darken-1" style={{ padding: '0 2rem' }}>
         <ul id="nav-mobile" className="right hide-on-med-and-down">
+          <li><NavLink to="/account">Аккаунт</NavLink></li>
+          <li><NavLink to="/room">Чат</NavLink></li>
+          <li><a href="/" onClick={logoutHandler}>Выйти</a></li>
+        </ul>
+      </div>
+    </nav>
+  )*/
+
+  return (
+    <nav>
+      <div className="nav-wrapper">
+        <a href="#" class="brand-logo">Logo</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li><NavLink to="/account">Аккаунт</NavLink></li>
           <li><NavLink to="/room">Чат</NavLink></li>
           <li><a href="/" onClick={logoutHandler}>Выйти</a></li>

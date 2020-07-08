@@ -5,7 +5,7 @@ import Message from '../components/Message'
 import User from '../components/User'
 
 const ChatPage = () => {
-    const { token } = useContext(AuthContext)
+    const { token, logout } = useContext(AuthContext)
 
     const [users, setUsers] = useState([])
 
@@ -23,8 +23,11 @@ const ChatPage = () => {
 
         socket.on('not auth', hst => {
             setHistory([])
+            logout()
             console.log('not auth')
         })
+
+        socket.emit('load history and users')
 
         return () => {
             socket.removeAllListeners('load history')
@@ -99,7 +102,7 @@ const ChatPage = () => {
                         <div className="card-header msg_head">
                             <div className="d-flex bd-highlight">
                                 <div className="img_cont">
-                                    <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img"></img>
+                                    <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img" alt="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"></img>
                                     <span className="online_icon"></span>
                                 </div>
                                 <div className="user_info">

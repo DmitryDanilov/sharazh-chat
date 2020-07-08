@@ -6,7 +6,7 @@ const Message = (props) => {
 
     const { msg } = props
 
-    const style = (msg.userId === userId) ? "d-flex justify-content-start mb-4" : "d-flex justify-content-end mb-4"
+    const style = (msg.userId === userId) ? "d-flex justify-content-end mb-4" : "d-flex justify-content-start mb-4"
 
     const formatDate = (date1) => {
 
@@ -39,7 +39,7 @@ const Message = (props) => {
                 <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img_msg" alt=""></img>
             </div>
             <div className="msg_cotainer">
-                <div className='nick-name'>{msg.userId}</div>
+                <div className='nick-name'>{msg.senderName}</div>
                 {msg.message}
                 <span className="msg_time">{dt}</span>
             </div>
