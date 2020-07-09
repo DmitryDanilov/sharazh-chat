@@ -1,7 +1,12 @@
 const { Router } = require('express')
+const { io } = require('../sockets/socket')
 const config = require('config')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const usersOnline = require('../storage/usersOnline')
+
+
+
 
 const router = Router()
 
@@ -18,6 +23,8 @@ router.post(
             const user = new User({ login, password, nickname: login })
 
             await user.save()
+
+            console.log('Пользователь создан')
 
             res.json({ message: 'Пользователь создан' })
         }
@@ -45,6 +52,9 @@ router.post(
                 config.get('jwtSecret'),
                 { expiresIn: '1h' }
             )
+
+            //usersOnline.set(user.id, user.id)
+            //io.emit('users online', Array.from(usersOnline.keys()))
 
             res.json({ token, userId: user.id, nickname: user.nickname })
         }

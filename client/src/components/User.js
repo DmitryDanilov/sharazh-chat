@@ -1,19 +1,11 @@
 import React from 'react'
 
 const User = (props) => {
-    /*let classIsOnline = ''
+    console.log('props', props)
 
-    props.usersOnline.forEach(element => {
-        
-        if(element === props.userId) {
-            console.log(`element ${element}, props.socketId ${props.userId}`)
-            classIsOnline = 'online_icon'
-            return
-        }
-        classIsOnline = 'online_icon offline'
-    })*/
+    let classIsOnline = props.usersOnline.some(user => user[1] === props.userId) ? 'online_icon' :'online_icon offline'
 
-    const classIsOnline = 'online_icon'
+    //const classIsOnline = 'online_icon'
 
     return (
         <li className="active">

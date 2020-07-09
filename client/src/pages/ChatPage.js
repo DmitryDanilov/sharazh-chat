@@ -14,26 +14,35 @@ const ChatPage = () => {
 
     const [message, setMessage] = useState('')
 
-    //const [usersOnline, setUsersOnline] = useState([])
+    const [usersOnline, setUsersOnline] = useState([])
 
     useEffect(() => {
         socket.on('load history', data => {
             const { hst, us } = data
+
+            //console.log('arr history', arr)
+
             setHistory(hst)
             setUsers(us)
+            //setUsersOnline(arr)
             console.log('load history')
         })
 
+        socket.emit('load history and users', token)
+
+        return () => {
+            socket.removeAllListeners('load history')
+        }
+    }, [])
+
+    useEffect(() => {
         socket.on('not auth', hst => {
             setHistory([])
             logout()
             console.log('not auth')
         })
 
-        socket.emit('load history and users')
-
         return () => {
-            socket.removeAllListeners('load history')
             socket.removeAllListeners('not auth')
         }
     }, [])
@@ -53,18 +62,20 @@ const ChatPage = () => {
         }
     }, [history])
 
-    /*useEffect(() => {
+    useEffect(() => {
         socket.on('users online', data => {
-            console.log('users online')
-            console.log(data)
-
+            //console.log('users online')
+            //console.log(data)
+            //console.log('data online', data)
             setUsersOnline(data)
+
+            //console.log('usersOnline', usersOnline)
         })
 
         return () => {
             socket.removeAllListeners('users online')
         }
-    }, [usersOnline])*/
+    }, [])
 
     useEffect(() => {
         const scrollingElement = document.getElementById('card-body')
@@ -72,12 +83,12 @@ const ChatPage = () => {
     })
 
     const sendHandler = () => {
-        setMessage('')
-
         socket.emit('new message', {
             token,
             message
         })
+
+        setMessage('')
     }
 
     const changeHandler = (e) => {
@@ -106,7 +117,7 @@ const ChatPage = () => {
                         <ui className="contacts">
                             {
                                 users && users.map((el, index) => {
-                                    return (<User key={index} user={el.nickname}/* userId={userId} usersOnline={usersOnline}*/ />)
+                                    return (<User key={index} user={el.nickname} userId={el.id} usersOnline={usersOnline} />)
                                 })
                             }
                         </ui>

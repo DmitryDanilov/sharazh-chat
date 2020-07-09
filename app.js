@@ -1,17 +1,19 @@
-const express = require('express')
-const http = require('http')
-const socketIO = require('socket.io')
+//const express = require('express')
+//const http = require('http')
+//const socketIO = require('socket.io')
+const { app, server, io, express } = require('./sockets/socket')
 const config = require('config')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 const Message = require('./models/Message')
 const User = require('./models/User')
 const cors = require('cors')
+const usersOnline = require('./storage/usersOnline')
 
-const app = express()
+/*const app = express()
 
 const server = http.createServer(app)
-const io = socketIO(server)
+const io = socketIO(server)*/
 
 io.origins('*:*')
 
@@ -25,68 +27,72 @@ app.use('/api/auth', require('./routes/auth.routes'))
 
 const start = async () => {
 
-    //const usersOnline = new Map()
-
     io.on('connection', async socket => {
         console.log(`New client connected ${socket.id}`)
 
-        //usersOnline.set(socket.id, socket.id)
+        socket.on('load history and users', async (token) => {
+            if (token) {
+                try {
+                    const decoded = jwt.verify(token, config.get('jwtSecret'))
 
-        //io.emit('users online', Array.from(usersOnline.keys()))
+                    usersOnline.set(socket.id, decoded.userId)
 
-        socket.on('load history and users', async () => {
-            const history = await Message.find()
+                    const history = await Message.find()
 
-            const hst = history.map(el => {
-                const { message, userId, dateTime, senderName } = el
-                return { message, userId, dateTime, senderName }
-            })
+                    const hst = history.map(el => {
+                        const { message, userId, dateTime, senderName } = el
+                        return { message, userId, dateTime, senderName }
+                    })
 
-            const users = await User.find()
+                    const users = await User.find()
 
-            const us = users.map(el => {
-                const { nickname } = el
-                return { nickname }
-            })
+                    const us = users.map(el => {
+                        const { nickname, id } = el
+                        return { nickname, id }
+                    })
 
-            socket.emit('load history', { hst, us })
+                    const arr = Array.from(usersOnline.entries())
+                    io.emit('load history', { hst, us })
+                    io.emit('users online', arr)
+                } catch (error) {
+                    io.emit('not auth')
+                }
+            }
         })
 
         socket.on('new message', async data => {
             const { token, message } = data
 
-
-
-            if (!token) {
-                io.emit('not auth')
-            }
-
             if (token) {
-                const decoded = jwt.verify(token, config.get('jwtSecret'))
 
-                if (decoded.exp < Date.now() / 1000) {
+                try {
+                    const decoded = jwt.verify(token, config.get('jwtSecret'))
+
+                    const msg = new Message({
+                        message: message,
+                        userId: decoded.userId,
+                        dateTime: new Date(),
+                        senderName: decoded.nickname
+                    })
+
+                    const savedMsg = await msg.save()
+
+                    io.emit('add message', savedMsg)
+                } catch (error) {
                     io.emit('not auth')
                 }
-
-                const msg = new Message({
-                    message: message,
-                    userId: decoded.userId,
-                    dateTime: new Date(),
-                    senderName: decoded.nickname
-                })
-
-                const savedMsg = await msg.save()
-
-                io.emit('add message', savedMsg)
+            }
+            else {
+                io.emit('not auth')
             }
         })
 
         socket.on('disconnect', () => {
-            tempSocket = socket.id
 
-            //usersOnline.delete(socket.id)
-            //io.emit('users online', Array.from(usersOnline.keys()))
-            
+            usersOnline.delete(socket.id)
+            const arr = Array.from(usersOnline.entries())
+            io.emit('users online', arr)
+
             console.log(`user disconnected ${socket.id}`)
         })
 
