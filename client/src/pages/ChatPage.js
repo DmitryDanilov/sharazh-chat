@@ -18,14 +18,12 @@ const ChatPage = () => {
 
     useEffect(() => {
         socket.on('load history', data => {
-            const { hst, us } = data
+            console.log('load history')
 
-            //console.log('arr history', arr)
+            const { hst, us } = data
 
             setHistory(hst)
             setUsers(us)
-            //setUsersOnline(arr)
-            console.log('load history')
         })
 
         socket.emit('load history and users', token)
@@ -33,19 +31,20 @@ const ChatPage = () => {
         return () => {
             socket.removeAllListeners('load history')
         }
-    }, [])
+    }, [token])
 
     useEffect(() => {
-        socket.on('not auth', hst => {
+        socket.on('not auth', () => {
+            console.log('not auth')
+
             setHistory([])
             logout()
-            console.log('not auth')
         })
 
         return () => {
             socket.removeAllListeners('not auth')
         }
-    }, [])
+    }, [logout])
 
     useEffect(() => {
         socket.on('add message', msg => {
@@ -64,12 +63,9 @@ const ChatPage = () => {
 
     useEffect(() => {
         socket.on('users online', data => {
-            //console.log('users online')
-            //console.log(data)
-            //console.log('data online', data)
-            setUsersOnline(data)
+            console.log('users online')
 
-            //console.log('usersOnline', usersOnline)
+            setUsersOnline(data)
         })
 
         return () => {
@@ -83,16 +79,19 @@ const ChatPage = () => {
     })
 
     const sendHandler = () => {
-        socket.emit('new message', {
-            token,
-            message
-        })
+        if (message) {
+            socket.emit('new message', {
+                token,
+                message
+            })
 
-        setMessage('')
+            setMessage('')
+        }
     }
 
     const changeHandler = (e) => {
-        setMessage(e.target.value)
+        const value = e.target.value.slice(-1) === '\n' ? e.target.value.slice(0, -1) : e.target.value
+        setMessage(value)
     }
 
     const pressEnter = (e) => {
@@ -166,7 +165,7 @@ const ChatPage = () => {
                                 <textarea
                                     value={message}
                                     onChange={changeHandler}
-                                    onKeyDown={pressEnter}
+                                    onKeyUp={pressEnter}
                                     name="" className="form-control type_msg" placeholder="Type your message..."></textarea>
                                 <div className="input-group-append">
                                     <span className="input-group-text send_btn"><i className="fas fa-location-arrow"></i></span>

@@ -1,11 +1,8 @@
 import React from 'react'
 
 const User = (props) => {
-    console.log('props', props)
-
+    
     let classIsOnline = props.usersOnline.some(user => user[1] === props.userId) ? 'online_icon' :'online_icon offline'
-
-    //const classIsOnline = 'online_icon'
 
     return (
         <li className="active">

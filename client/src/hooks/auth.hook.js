@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
+import socket from '../socket'
 
 const storageName = 'userData'
 
@@ -24,7 +25,9 @@ export const useAuth = () => {
         setNickname(null)
 
         localStorage.removeItem(storageName)
-    }, [])
+
+        socket.emit('user logout', token)
+    }, [token])
 
     useEffect(() => {
         const data = JSON.parse(localStorage.getItem(storageName))
