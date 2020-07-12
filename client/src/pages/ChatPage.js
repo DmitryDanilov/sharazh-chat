@@ -16,6 +16,8 @@ const ChatPage = () => {
 
     const [usersOnline, setUsersOnline] = useState([])
 
+    const [searchUser, setSearchUser] = useState('')
+
     useEffect(() => {
         socket.on('load history', data => {
             console.log('load history')
@@ -94,6 +96,10 @@ const ChatPage = () => {
         setMessage(value)
     }
 
+    const serchChangeHandler = (e) => {
+        setSearchUser(e.target.value)
+    }
+
     const pressEnter = (e) => {
         if (e.key === 'Enter') {
             sendHandler()
@@ -106,7 +112,14 @@ const ChatPage = () => {
                 <div className="col-md-4 col-xl-3 chat"><div className="card mb-sm-3 mb-md-0 contacts_card">
                     <div className="card-header">
                         <div className="input-group">
-                            <input type="text" placeholder="Search..." name="" className="form-control search" />
+                            <input
+                                value={searchUser}
+                                onChange={serchChangeHandler}
+                                type="text"
+                                placeholder="Search..."
+                                name=""
+                                className="form-control search"
+                            />
                             <div className="input-group-prepend">
                                 <span className="input-group-text search_btn"><i className="fas fa-search"></i></span>
                             </div>
@@ -114,9 +127,11 @@ const ChatPage = () => {
                     </div>
                     <div className="card-body contacts_body">
                         <ui className="contacts">
+                            <User key={0} user={"Все мнтж"} userId={null} usersOnline={null} />
                             {
                                 users && users.map((el, index) => {
-                                    return (<User key={index} user={el.nickname} userId={el.id} usersOnline={usersOnline} />)
+                                    if (el.nickname.includes(searchUser))
+                                        return (<User key={index + 1} user={el.nickname} userId={el.id} usersOnline={usersOnline} />)
                                 })
                             }
                         </ui>
