@@ -24,31 +24,43 @@ const AuthPage = () => {
         auth.login(res.data.token, res.data.userId, res.data.nickname)
     }
 
+    const pressEnter = (e) => {
+        if (e.key === 'Enter') {
+            loginHandler()
+        }
+    }
+
     return (
         <div className='auth-page'>
             <div className='auth-form'>
-                <div>
+                <div className='auth-title'>Авторизация</div>
+                <div className='auth-input'>
                     <input
                         id="login"
                         name="login"
                         value={authForm.login}
                         onChange={changeHandler}
+                        placeholder={'Введите логин'}
                     />
                 </div>
-                <div>
+                <div className='auth-input'>
                     <input
                         id="password"
                         name="password"
                         value={authForm.password}
                         onChange={changeHandler}
+                        placeholder={'Введите пароль'}
+                        onKeyUp={pressEnter}
                     />
                 </div>
-                <button
-                    onClick={registerHandler}
-                >Регистрация</button>
-                <button
-                    onClick={loginHandler}
-                >Войти</button>
+                <div className='auth-input'>
+                    <button
+                        onClick={loginHandler}
+                    >Войти</button>
+                    <button
+                        onClick={registerHandler}
+                    >Регистрация</button>
+                </div>
             </div>
         </div>
     )
