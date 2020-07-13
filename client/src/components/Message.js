@@ -38,7 +38,7 @@ const Message = (props) => {
             <div className="img_cont_msg">
                 <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img_msg" alt=""></img>
             </div>
-            <div className="msg_cotainer">
+            <div className={msg.userId === userId ? "msg_cotainer_send" : "msg_cotainer"}>
                 <div className='nick-name'>{msg.senderName}</div>
                 {msg.message}
                 <span className="msg_time">{dt}</span>

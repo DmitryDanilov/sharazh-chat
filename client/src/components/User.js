@@ -1,12 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const User = (props) => {
+    //const [active, setActive] = useState(false)
+
+    const clickActive = () => {
+        props.setActiveUser(props.userId)
+    }
 
     if (props.usersOnline && props.user) {
         let classIsOnline = props.usersOnline.some(user => user[1] === props.userId) ? 'online_icon' : 'online_icon offline'
 
+        const activeClass = props.active ? 'active' : ''
+
         return (
-            <li className="active">
+            <li className={"li-user " + activeClass} onClick={clickActive}>
                 <div className="d-flex bd-highlight">
                     <div className="img_cont">
                         <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" className="rounded-circle user_img" alt="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"></img>

@@ -9,8 +9,7 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-body,
-html {
+body, html {
     height: 100%;
     margin: 0;
     background: #7F7FD5;
@@ -117,6 +116,10 @@ html {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
+.active:hover {
+    background-color: rgba(0, 0, 0, 0.3) !important;
+}
+
 .user_img {
     height: 70px;
     width: 70px;
@@ -203,6 +206,8 @@ html {
     background-color: #78e08f;
     padding: 10px;
     position: relative;
+    min-width: 80px;
+    max-width: 600px;
 }
 
 .msg_time {
@@ -276,5 +281,47 @@ html {
 .nick-name {
     color: #7b7979;
     font-size: 10px;
+}
 
+/*------------SCROLL----------*/
+.card-body {
+    overflow-y: hidden;
+    padding-right: 10px;
+}
+
+.card-body:hover {
+    overflow-y: auto;
+    padding-right: 3px;
+    -webkit-overflow-scrolling: touch;
+    -moz-overflow-scrolling: touch;
+    -ms-overflow-scrolling: touch;
+    -o-overflow-scrolling: touch;
+}
+
+.card-body::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+.li-user:hover {
+    background-color: rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+
+
+/*--------------- NAVBAR ---------------------*/
+
+.mr-auto {
+    margin-right: unset !important;
+}
+
+#basic-navbar-nav {
+    justify-content: flex-end;
 }

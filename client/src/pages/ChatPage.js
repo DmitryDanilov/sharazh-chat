@@ -7,16 +7,12 @@ import User from '../components/User'
 const ChatPage = () => {
 
     const { token, logout/*, userId*/ } = useContext(AuthContext)
-
     const [users, setUsers] = useState([])
-
     const [history, setHistory] = useState([])
-
     const [message, setMessage] = useState('')
-
     const [usersOnline, setUsersOnline] = useState([])
-
     const [searchUser, setSearchUser] = useState('')
+    const [active, setActive] = useState('')
 
     useEffect(() => {
         socket.on('load history', data => {
@@ -106,6 +102,10 @@ const ChatPage = () => {
         }
     }
 
+    const setActiveUser = (userId) => {
+        setActive(userId)
+    }
+
     return (
         <div className="container-fluid h-100">
             <div className="row justify-content-center h-100">
@@ -130,8 +130,9 @@ const ChatPage = () => {
                             <User key={0} user={"Все мнтж"} userId={null} usersOnline={null} />
                             {
                                 users && users.map((el, index) => {
+                                    const activeUser = el.id === active
                                     if (el.nickname.includes(searchUser))
-                                        return (<User key={index + 1} user={el.nickname} userId={el.id} usersOnline={usersOnline} />)
+                                        return (<User key={index + 1} user={el.nickname} userId={el.id} usersOnline={usersOnline} active={activeUser} setActiveUser={setActiveUser}/>)
                                 })
                             }
                         </ui>
