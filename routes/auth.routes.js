@@ -17,7 +17,7 @@ router.post(
         if (login && password) {
             const candidate = await User.findOne({ login })
             if (candidate) {
-                res.json({ message: 'Пользователь существует' })
+                return res.json({ message: 'Пользователь существует' })
             }
 
             const user = new User({ login, password, nickname: login })
@@ -26,9 +26,9 @@ router.post(
 
             console.log('Пользователь создан')
 
-            res.json({ message: 'Пользователь создан' })
+            return res.json({ message: 'Пользователь создан' })
         }
-        res.send()
+        return res.send()
 
     }
 )
@@ -40,11 +40,11 @@ router.post(
         if (login && password) {
             const user = await User.findOne({ login })
             if (!user) {
-                res.json({ message: 'Пользователя не существует' })
+                return res.json({ message: 'Пользователя не существует' })
             }
 
             if (password !== user.password) {
-                res.json({ message: 'Неверный пароль' })
+                return res.json({ message: 'Неверный пароль' })
             }
 
             const token = jwt.sign(
@@ -56,9 +56,9 @@ router.post(
             //usersOnline.set(user.id, user.id)
             //io.emit('users online', Array.from(usersOnline.keys()))
 
-            res.json({ token, userId: user.id, nickname: user.nickname })
+            return res.json({ token, userId: user.id, nickname: user.nickname })
         }
-        res.send()
+        return res.send()
     }
 )
 
