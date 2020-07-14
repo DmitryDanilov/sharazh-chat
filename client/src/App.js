@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { useAuth } from './hooks/auth.hook'
 import { AuthContext } from './context/AuthContext'
 import { useRoutes } from './routes'
-import { MyNavbar } from './components/Navbar'
+import { NavbarPanel } from './components/NavbarPanel'
 
 function App() {
 
@@ -18,7 +18,7 @@ function App() {
       token, login, logout, userId, isAuthenticated
     }}>
       <BrowserRouter>
-        {isAuthenticated && <MyNavbar />}
+        {isAuthenticated && <NavbarPanel />}
         {routes}
       </BrowserRouter>
     </AuthContext.Provider>
